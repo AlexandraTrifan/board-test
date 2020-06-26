@@ -14,13 +14,17 @@ TTYUSB=ttyPluto0
 # Functions section                #
 #----------------------------------#
 
+read_xo_correction() {
+	iio_attr -q $IIO_URI_MODE -d ad9361-phy xo_correction
+}
+
 xo_calibration() {
 	local xo
 	./cal_ad9361 $IIO_URI_MODE -s 1048576 -b 1048576 -e 2000000000 || return 1
 
 	# Check that we can read the XO correction attr
-	iio_attr -q $IIO_URI_MODE -d ad9361-phy xo_correction || return 1
-	xo=$(iio_attr -q $IIO_URI_MODE -d ad9361-phy xo_correction)
+	read_xo_correction || return 1
+	xo=$(read_xo_correction)
 	[ -n "$xo" ] || {
 		echo_red "Got empty XO value"
 		return 1
@@ -81,10 +85,10 @@ tx_margin() {
 
 check_env() {
 	local pkey="$(productkey_gen "$BOARD_SERIAL" "PlutoSDR_by_Analog_Devices_Inc!")"
+	[ -n "$JIG_XO" ] || JIG_XO=$(read_xo_correction)
 	local vars="serial=$BOARD_SERIAL ad936x_ext_refclk=<$JIG_XO> productkey=$pkey"
 
-	echo_green "5. Rebooting & checking env-vars are saved"
-
+	echo_green "7. Rebooting & checking env-vars are saved"
 	powercycle_board_wait
 
 	run_ssh_cmd 'echo /dev/mtd0 0xff000 0x1000 0x1000 > /tmp/fw_env.conf'
@@ -99,6 +103,7 @@ check_env() {
 			echo_red "   Exp '$var'"
 			return 1
 		fi
+		echo_green "    Read '$var1'"
 	done
 	echo_green "Env-vars saved correctly"
 
@@ -112,8 +117,8 @@ check_env() {
 post_flash() {
 	force_terminate_programs
 
-	echo_green "0. Enabling USB data port"
-	enable_usb_data_port
+	echo_green "0. Enabling USB ports"
+	enable_all_usb_ports
 
 	echo_green "1. Waiting for board to come online (timeout $BOARD_ONLINE_TIMEOUT seconds)"
 	wait_for_board_online || {
@@ -152,13 +157,11 @@ post_flash() {
 		return 1
 	}
 
-	check_env || return 1
-
 	echo_green "6. Locking flash"
 
-	wait_file_exists "$TTYUSB" 20 || {
+	wait_file_exists "/dev/$TTYUSB" 20 || {
 		echo
-		echo_red "   '$TTYUSB' did not appear after time 20 seconds"
+		echo_red "   '/dev/$TTYUSB' did not appear after time 20 seconds"
 		return 1
 	}
 
@@ -168,6 +171,8 @@ post_flash() {
 		echo_red "   Locking flash failed"
 		return 1
 	}
+
+	check_env || return 1
 
 	force_terminate_programs
 
