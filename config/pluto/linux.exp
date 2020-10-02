@@ -27,9 +27,11 @@ wait_for_prompt "ssh"
 ############### Check IIO device probing ################
 
 send "grep '' /sys/bus/iio/devices/iio\:device*/name | wc -l\r"
-# Expect 5
+# Expect 5 or 4
 
 expect {
+	-re "4.*$multiPrompt" {
+	}
 	-re "5.*$multiPrompt" {
 	}
         timeout {
@@ -71,7 +73,7 @@ send_wait_for_prompt "cat /etc/serial | xargs echo PlutoSDR_by_Analog_Devices_In
 ############### Compute and set actual frequency here ################
 
 set cmd "echo -n 'ad936x_ext_refclk <' >> /var/fw.scr;"
-set cmd "$cmd echo -n $\(cat /sys/bus/iio/devices/iio:device1/xo_correction\) >> /var/fw.scr;"
+set cmd "$cmd echo -n $\(cat $\(find /sys -name xo_correction\)\) >> /var/fw.scr;"
 set cmd "$cmd echo '>' >> /var/fw.scr\r"
 
 send_wait_for_prompt $cmd
