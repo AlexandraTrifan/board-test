@@ -2,10 +2,10 @@
 
 var SHOW_TIMESTAMP = true;
 var SHOW_START_END_TIME = true;
-var MAX_HIGH_GAIN = 2.525;
-var MIN_HIGH_GAIN = 2.475;
-var MAX_LOW_GAIN = 10.25;
-var MIN_LOW_GAIN = 9.75;
+var MAX_HIGH_GAIN = 2.515;
+var MIN_HIGH_GAIN = 2.465;
+var MAX_LOW_GAIN = 10.15;
+var MIN_LOW_GAIN = 9.65;
 var ADC_CONST_ERR_THRESHOLD = 0.1;
 var WORKING_DIR = ".";
 var M2KCALIB_INI = "m2k-calib-factory.ini";
