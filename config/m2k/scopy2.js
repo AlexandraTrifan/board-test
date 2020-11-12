@@ -3,7 +3,7 @@
 var SHOW_TIMESTAMP = true;
 var SHOW_START_END_TIME = true;
 var ADC_BANDWIDTH_THRESHOLD = 9;
-var WORKING_DIR = ".";
+var WORKING_DIR = "~/plutosdr-m2k-production-test-V2";
 
 function _osc_change_gain_mode(ch, high)
 {

@@ -7,7 +7,7 @@ var MIN_HIGH_GAIN = 2.465;
 var MAX_LOW_GAIN = 10.15;
 var MIN_LOW_GAIN = 9.65;
 var ADC_CONST_ERR_THRESHOLD = 0.1;
-var WORKING_DIR = ".";
+var WORKING_DIR = "~/plutosdr-m2k-production-test-V2";
 var M2KCALIB_INI = "m2k-calib-factory.ini";
 var M2KCALIB_INI_LOCAL = "/tmp/" + M2KCALIB_INI;
 
@@ -77,7 +77,7 @@ function _test_osc_range(ch, high)
 		result += "FAILED ";
 	}
 	result += " channel: " +  ch + " high-mode: " + high + " " + value;
-	log(result); 
+	log(result);
 	osc.running = false;	
 	return ret;
 }

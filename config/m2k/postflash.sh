@@ -96,9 +96,9 @@ post_flash() {
 
 	echo_green "2a. Locking flash"
 
-	wait_file_exists "$TTYUSB" 20 || {
+	wait_file_exists "/dev/$TTYUSB" 20 || {
 		echo
-		echo_red "   '$TTYUSB' did not appear after time 20 seconds"
+		echo_red "   '/dev/$TTYUSB' did not appear after time 20 seconds"
 		return 1
 	}
 
@@ -110,7 +110,7 @@ post_flash() {
 	}
 
 	echo_green "3. Testing Scopy -- Part 1"
-	scopy --nogui --script $SCRIPT_DIR/config/m2k/scopy1.js || {
+	flatpak run org.adi.Scopy --nogui --script $SCRIPT_DIR/config/m2k/scopy1.js || {
 		terminate_any_lingering_stuff
 		echo_red "Scopy tests have failed..."
 		return 1
@@ -137,7 +137,7 @@ post_flash() {
 	}
 
 	echo_green "4. Testing Scopy -- Part 2"
-	scopy --script $SCRIPT_DIR/config/m2k/scopy2.js || {
+	flatpak run org.adi.Scopy --script $SCRIPT_DIR/config/m2k/scopy2.js || {
 		terminate_any_lingering_stuff
 		echo_red "Scopy tests have failed..."
 		return 1
