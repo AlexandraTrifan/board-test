@@ -200,13 +200,13 @@ production() {
 
 		echo_green "Waiting for start button"
 
-		[ "$mode" == "single" ] || \
-			wait_pins D "$START_BUTTON $REBOOT_BUTTON" || {
-			echo_red "Waiting for start button failed..."
-			handle_error_state
-			sleep 1
-			continue
-		}
+#		[ "$mode" == "single" ] || \
+#			wait_pins D "$START_BUTTON $REBOOT_BUTTON" || {
+#			echo_red "Waiting for start button failed..."
+#			handle_error_state
+#			sleep 1
+#			continue
+#		}
 		RUN_TIMESTAMP="$(date +"%Y-%m-%d_%H-%M-%S")"
 
 		! check_and_reboot "$LOGFILE" || break
