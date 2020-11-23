@@ -25,7 +25,7 @@ function _read_pos_power_supply()
 
 	power.dac1_value=0.100;
 	power.dac1_enabled=true;
-	value = extern.start("sshpass -pjig ssh jig@localhost sudo $WORKING_DIR/m2k_power_calib_meas.sh V5B pos true");
+	value = extern.start("sshpass -pjig ssh jig@localhost sudo " + WORKING_DIR + "/m2k_power_calib_meas.sh V5B pos true");
 	log("pos result: " + value);
 	readFromConsole("hey");
 	if (value == '' || value == "failed" || isNaN(value))
@@ -33,7 +33,7 @@ function _read_pos_power_supply()
 
 	power.dac1_value=4.5;
 	power.dac1_enabled=true;
-	value = extern.start("sshpass -pjig ssh jig@localhost sudo $WORKING_DIR/m2k_power_calib_meas.sh V5B pos true");
+	value = extern.start("sshpass -pjig ssh jig@localhost sudo " + WORKING_DIR + "/m2k_power_calib_meas.sh V5B pos true");
 	log("pos result: " + value);
 	if (value == '' || value == "failed" || isNaN(value))
 		return false;
@@ -47,14 +47,14 @@ function _read_neg_power_supply()
 	var value;
 	power.dac2_value=-0.100;
 	power.dac2_enabled=true;
-	value = extern.start("sshpass -pjig ssh jig@localhost sudo $WORKING_DIR/m2k_power_calib_meas.sh V6B neg true").trim();
+	value = extern.start("sshpass -pjig ssh jig@localhost sudo " + WORKING_DIR + "/m2k_power_calib_meas.sh V6B neg true").trim();
 	log("neg result: " + value);
 	if (value == '' || value == "failed" || isNaN(value))
 		return false;
 
 	power.dac2_value=-4.5;
 	power.dac2_enabled=true;
-	value = extern.start("sshpass -pjig ssh jig@localhost sudo $WORKING_DIR/m2k_power_calib_meas.sh V6B neg true").trim();
+	value = extern.start("sshpass -pjig ssh jig@localhost sudo " + WORKING_DIR + "/m2k_power_calib_meas.sh V6B neg true").trim();
 	log("neg result: " + value);
 	if (value == '' || value == "failed" || isNaN(value))
 		return false;
@@ -183,9 +183,9 @@ function toggle_relay(pos)
 {
 	/* set pin4 high to keep ref measurement off */
 	if (pos)
-		return extern.start("sshpass -pjig ssh jig@localhost sudo $WORKING_DIR/toggle_pins.sh GPIO_EXP1 pin7 pin4");
+		return extern.start("sshpass -pjig ssh jig@localhost sudo " + WORKING_DIR + "/toggle_pins.sh GPIO_EXP1 pin7 pin4");
 	else
-		return extern.start("sshpass -pjig ssh jig@localhost sudo $WORKING_DIR/toggle_pins.sh GPIO_EXP1 pin4");
+		return extern.start("sshpass -pjig ssh jig@localhost sudo " + WORKING_DIR + "/toggle_pins.sh GPIO_EXP1 pin4");
 }
 
 function _test_osc_trimmer_adjust(ch, positive)
@@ -219,7 +219,7 @@ function _test_osc_trimmer_adjust(ch, positive)
 
 		extern.start("sshpass -pjig ssh jig@localhost rm -rf " + ipc_file);
 		/* Some simple stupid IPC */
-		extern.start("sshpass -pjig ssh jig@localhost sudo ( ./wait_pins.sh D pin1 ; echo pressed > " +
+		extern.start("sshpass -pjig ssh jig@localhost sudo ( " + WORKING_DIR + "/wait_pins.sh D pin1 ; echo pressed > " +
 			ipc_file + " ) &");
 
 		while (input.trim() != "pressed") {

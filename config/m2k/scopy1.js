@@ -9,7 +9,7 @@ var MIN_LOW_GAIN = 9.65;
 var ADC_CONST_ERR_THRESHOLD = 0.1;
 var WORKING_DIR = "~/plutosdr-m2k-production-test-V2";
 var M2KCALIB_INI = "m2k-calib-factory.ini";
-var M2KCALIB_INI_LOCAL = "/tmp/" + M2KCALIB_INI;
+var M2KCALIB_INI_LOCAL = "/home/jig/" + M2KCALIB_INI;
 
 /*********************************************************************************************************
 *	STEP 5
@@ -43,7 +43,7 @@ function _osc_check_range(high, value)
 
 function disable_ref_measurement()
 {
-	extern.start("sshpass -pjig ssh jig@localhost sudo ~/plutosdr-m2k-production-test-V2/ref_measure_ctl.sh disable");
+	extern.start("sshpass -pjig ssh jig@localhost sudo " + WORKING_DIR + "/ref_measure_ctl.sh disable");
 	//extern.start("./ref_measure_ctl.sh disable");
 }
 
@@ -56,10 +56,10 @@ function _test_osc_range(ch, high)
 	var i;
 
 	if (high) {
-		output = extern.start("sshpass -pjig ssh jig@localhost sudo ~/plutosdr-m2k-production-test-V2/ref_measure_ctl.sh ref2.5v");
+		output = extern.start("sshpass -pjig ssh jig@localhost sudo " + WORKING_DIR + "/ref_measure_ctl.sh ref2.5v");
 		//output = extern.start("./ref_measure_ctl.sh ref2.5v");
 	} else {
-		output = extern.start("sshpass -pjig ssh jig@localhost sudo ~/plutosdr-m2k-production-test-V2/ref_measure_ctl.sh ref10v");
+		output = extern.start("sshpass -pjig ssh jig@localhost sudo " + WORKING_DIR + "/ref_measure_ctl.sh ref10v");
 		//output = extern.start("./ref_measure_ctl.sh ref10v");
 	}
 

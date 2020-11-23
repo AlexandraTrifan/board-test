@@ -10,4 +10,15 @@ SCRIPT_DIR="$(readlink -f $(dirname $0))"
 
 source $SCRIPT_DIR/config.sh
 
+#----------------------------------#
+# Global definitions section       #
+#----------------------------------#
+
+#source $SCRIPT_DIR/vars.sh
+
+#----------------------------------#
+# Utils                            #
+#----------------------------------#
+#source $SCRIPT_DIR/lib/utils.sh
+
 ref_measure_ctl "$1"
