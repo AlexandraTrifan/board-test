@@ -25,15 +25,14 @@ function _read_pos_power_supply()
 
 	power.dac1_value=0.100;
 	power.dac1_enabled=true;
-	value = extern.start("sshpass -pjig ssh jig@localhost sudo " + WORKING_DIR + "/m2k_power_calib_meas.sh V5B pos true");
+	value = extern.start("sshpass -pjig ssh jig@localhost sudo " + WORKING_DIR + "/m2k_power_calib_meas.sh V5B pos true").trim();
 	log("pos result: " + value);
-	readFromConsole("hey");
 	if (value == '' || value == "failed" || isNaN(value))
 		return false;
 
 	power.dac1_value=4.5;
 	power.dac1_enabled=true;
-	value = extern.start("sshpass -pjig ssh jig@localhost sudo " + WORKING_DIR + "/m2k_power_calib_meas.sh V5B pos true");
+	value = extern.start("sshpass -pjig ssh jig@localhost sudo " + WORKING_DIR + "/m2k_power_calib_meas.sh V5B pos true").trim();
 	log("pos result: " + value);
 	if (value == '' || value == "failed" || isNaN(value))
 		return false;
@@ -196,7 +195,7 @@ function _test_osc_trimmer_adjust(ch, positive)
 	var ch_type = "positive";
 	/* FIXME: change this to something else if needed */
 	var continue_button = "pin1";
-	var ipc_file = "/tmp/" + continue_button + "_pressed";
+	var ipc_file = "/home/jig/" + continue_button + "_pressed";
 
 	osc.internal_trigger = true;
 	osc.trigger_source = ch;
