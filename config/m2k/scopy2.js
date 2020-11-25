@@ -195,7 +195,7 @@ function _test_osc_trimmer_adjust(ch, positive)
 	var ch_type = "positive";
 	/* FIXME: change this to something else if needed */
 	var continue_button = "pin1";
-	var ipc_file = "/home/jig/" + continue_button + "_pressed";
+	var ipc_file = "/home/jig/.tmp/" + continue_button + "_pressed";
 
 	osc.internal_trigger = true;
 	osc.trigger_source = ch;
@@ -218,8 +218,7 @@ function _test_osc_trimmer_adjust(ch, positive)
 
 		extern.start("sshpass -pjig ssh jig@localhost rm -rf " + ipc_file);
 		/* Some simple stupid IPC */
-		extern.start("sshpass -pjig ssh jig@localhost sudo ( " + WORKING_DIR + "/wait_pins.sh D pin1 ; echo pressed > " +
-			ipc_file + " ) &");
+		extern.start("sshpass -pjig ssh jig@localhost sudo " + WORKING_DIR + "/wait_btn_background.sh " + ipc_file + " &");
 
 		while (input.trim() != "pressed") {
 			input = extern.start("sshpass -pjig ssh jig@localhost cat " + ipc_file);

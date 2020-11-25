@@ -9,7 +9,7 @@ var MIN_LOW_GAIN = 9.65;
 var ADC_CONST_ERR_THRESHOLD = 0.1;
 var WORKING_DIR = "~/plutosdr-m2k-production-test-V2";
 var M2KCALIB_INI = "m2k-calib-factory.ini";
-var M2KCALIB_INI_LOCAL = "/home/jig/" + M2KCALIB_INI;
+var M2KCALIB_INI_LOCAL = "/home/jig/.tmp/" + M2KCALIB_INI;
 
 /*********************************************************************************************************
 *	STEP 5
@@ -279,7 +279,7 @@ function _calibrate_neg_power_supply()
 	
 	while (next_step > 0) {
 		// call some shell script which returns the ADC value
-		value = extern.start("sshpass -pjig ssh jig@localhost sudo " +  WORKING_DIR + "/m2k_power_calib_meas.sh V6B neg false");
+		value = extern.start("sshpass -pjig ssh jig@localhost sudo " +  WORKING_DIR + "/m2k_power_calib_meas.sh V6B neg false").trim();
 		log("neg " + step + " result: " + value);
 		if (value == '' || value == "failed" || isNaN(value))
 			return false;
@@ -314,11 +314,11 @@ function step_7()
 	manual_calib.saveCalibration(M2KCALIB_INI_LOCAL);
 	ret = extern.start("sshpass -pjig ssh jig@localhost sudo " + WORKING_DIR + "/scp.sh " + M2KCALIB_INI_LOCAL + " root@192.168.2.1:/mnt/jffs2/" + M2KCALIB_INI + " analog").trim();
 	if (ret != "ok") {
-		extern.start("sshpass -pjig ssh jig@localhost rm -f " + M2KCALIB_INI_LOCAL);
+		extern.start("sshpass -pjig ssh jig@localhost sudo rm -f " + M2KCALIB_INI_LOCAL);
 		log("Failed to save calibration file to M2k: " + ret);
 		return false;
 	}
-	extern.start("sshpass -pjig ssh jig@localhost rm -f " + M2KCALIB_INI_LOCAL);
+	extern.start("sshpass -pjig ssh jig@localhost sudo rm -f " + M2KCALIB_INI_LOCAL);
 	log("Saved calibration parameters to file");
 	return true;
 }
