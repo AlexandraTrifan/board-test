@@ -80,9 +80,6 @@ post_flash() {
 		return 1
 	}
 
-	# Remove previous calibration file from the board; otherwise, calibrating it again we will only break it
-	sshpass -panalog ssh root@192.168.2.1 rm /mnt/jffs2/m2k-calib*.ini /mnt/m2k-calib*.ini
-
 	BOARD_SERIAL=$(get_hwserial 20)
 	[ -n "$BOARD_SERIAL" ] || {
 		echo_red "Could not get device serial number"
